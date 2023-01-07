@@ -1,0 +1,7 @@
+{
+  "default": {
+    "paths": ["specs/"],
+    "requireModule": ["ts-node/register"], 
+    "require": ["specs/steps/**/*.ts"]
+  }
+}

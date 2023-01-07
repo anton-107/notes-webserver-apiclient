@@ -1,0 +1,15 @@
+{
+  "name": "notes-webserver-apiclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --publish-quiet"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^8.10.0",
+    "ts-node": "^10.9.1"
+  }
+}

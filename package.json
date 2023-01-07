@@ -6,13 +6,16 @@
   "scripts": {
     "build": "tsc",
     "test": "cucumber-js --publish-quiet",
-    "coverage": "nyc npm test --lines 100 --branches 100"
+    "coverage": "nyc npm test --lines 100 --branches 100",
+    "check-format": "prettier --check .",
+    "fix-format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^8.10.0",
     "nyc": "^15.1.0",
+    "prettier": "^2.8.2",
     "ts-node": "^10.9.1"
   }
 }

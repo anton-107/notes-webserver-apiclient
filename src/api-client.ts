@@ -1,3 +1,1 @@
-export class APIClient {
-  
-}
+export class APIClient {}

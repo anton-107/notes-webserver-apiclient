@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "cucumber-js --publish-quiet"
+    "test": "cucumber-js --publish-quiet",
+    "coverage": "nyc npm test --lines 100 --branches 100"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^8.10.0",
+    "nyc": "^15.1.0",
     "ts-node": "^10.9.1"
   }
 }

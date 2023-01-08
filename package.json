@@ -8,12 +8,18 @@
     "test": "cucumber-js --publish-quiet",
     "coverage": "nyc npm test --lines 100 --branches 100",
     "check-format": "prettier --check .",
-    "fix-format": "prettier --write ."
+    "fix-format": "prettier --write .",
+    "lint": "eslint . --ext .ts",
+    "fix-lint": "eslint . --ext .ts --fix",
+    "fix": "npm run fix-format && npm run fix-lint"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^8.10.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.2",
     "ts-node": "^10.9.1"

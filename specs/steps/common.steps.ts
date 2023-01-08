@@ -1,22 +1,20 @@
-import { Given, When, Then } from "@cucumber/cucumber";
-import { APIClient } from "../../src/api-client";
+import { Given, Then, When } from "@cucumber/cucumber";
+
+import { TestScenario } from "./test-scenario";
+
+const testScenario = new TestScenario();
 
 Given(
   "I am logged in as {string} \\/ {string}",
-  function (login: string, password: string) {
-    // Write code here that turns the phrase above into concrete actions
-    const client = new APIClient();
-    console.log("client", client);
-    return true;
+  async (login: string, password: string) => {
+    await testScenario.authorizeClient(login, password);
   }
 );
 
-When("I call {string} action", function (actionName: string) {
-  // Write code here that turns the phrase above into concrete actions
-  return true;
+When("I call {string} action", async (actionName: string) => {
+  await testScenario.callAction(actionName);
 });
 
 Then("I get {string} http code in response", function (httpCode: string) {
-  // Write code here that turns the phrase above into concrete actions
-  return true;
+  testScenario.checkResponseCode(httpCode);
 });

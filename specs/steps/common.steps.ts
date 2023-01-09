@@ -1,6 +1,6 @@
 import { Given, Then, When } from "@cucumber/cucumber";
 
-import { TestScenario } from "./test-scenario";
+import { TestScenario } from "./test-scenario.js";
 
 const testScenario = new TestScenario();
 

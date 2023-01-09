@@ -1,6 +1,6 @@
 import assert from "assert";
 
-import { APIClient, HttpResponse } from "../../src/api-client";
+import { APIClient, HttpResponse } from "../../src/api-client.js";
 
 export class TestScenario {
   private client = new APIClient();
@@ -17,7 +17,7 @@ export class TestScenario {
     }
   }
 
-  public async checkResponseCode(httpCode: string) {
+  public checkResponseCode(httpCode: string) {
     assert.equal(httpCode, this.lastResponse.httpCode);
   }
 }

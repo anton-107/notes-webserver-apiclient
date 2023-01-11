@@ -15,6 +15,6 @@ When("I call {string} action", async (actionName: string) => {
   await testScenario.callAction(actionName);
 });
 
-Then("I get {string} http code in response", function (httpCode: string) {
-  testScenario.checkResponseCode(httpCode);
+Then("I get {string} http code in response", async (httpCode: string) => {
+  await testScenario.checkResponseCode(httpCode);
 });

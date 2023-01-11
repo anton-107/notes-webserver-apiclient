@@ -7,17 +7,19 @@ export class TestScenario {
   private lastResponse: HttpResponse<object>;
 
   public async authorizeClient(login: string, password: string) {
-    this.client.authorize(login, password);
+    await this.client.authorize(login, password);
   }
 
   public async callAction(actionName: string) {
     switch (actionName) {
       case "createNotebook":
-        this.lastResponse = await this.client.createNotebook();
+        this.lastResponse = await this.client.createNotebook(
+          "This notebook is created programmatically"
+        );
     }
   }
 
   public checkResponseCode(httpCode: string) {
-    assert.equal(httpCode, this.lastResponse.httpCode);
+    assert.equal(httpCode, String(this.lastResponse.httpCode));
   }
 }

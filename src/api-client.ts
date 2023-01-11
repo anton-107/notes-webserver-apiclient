@@ -39,25 +39,35 @@ export class APIClient {
     this.authenticationToken = cookies["Authentication"];
     return true;
   }
-  public async createNotebook(): Promise<HttpResponse<Notebook>> {
-    // const response = await fetch(`${process.env.API_ROOT}/notebook`, {
-    //   method: "post",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     // "Cookie": cookie.serialize('Authentication', this.authenticationToken),
-    //   },
-    //   body: JSON.stringify({
-    //     "notebook-name": "This notebook is created programmatically",
-    //   }),
-    // });
-    // const responseHeaders = response.headers;
-    // const statusCode = response.status;
-
-    // console.log("createNotebook resp", statusCode, responseHeaders);
+  public async createNotebook(
+    notebookName: string
+  ): Promise<HttpResponse<Notebook>> {
+    const serializedCookie = cookie.serialize(
+      "Authentication",
+      this.authenticationToken
+    );
+    const response = await fetch(`${process.env.API_ROOT}/notebook`, {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+        cookie: serializedCookie,
+      },
+      body: JSON.stringify({
+        "notebook-name": notebookName,
+      }),
+    });
+    const httpCode = response.status;
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
 
     return {
-      httpCode: 0,
-      body: undefined,
+      httpCode,
+      body: body as Notebook,
     };
   }
 }

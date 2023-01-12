@@ -4,3 +4,5 @@ Feature: Publish notes via API client
     Given I am logged in as 'user1' / '1234'
     When I call 'createNotebook' action
     Then I get '200' http code in response
+    When I call 'createNote' action
+    Then I get '200' http code in response

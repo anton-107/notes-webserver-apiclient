@@ -1,25 +1,48 @@
 import assert from "assert";
 
-import { APIClient, HttpResponse } from "../../src/api-client.js";
+import { APIClient } from "../../src/api-client.js";
 
 export class TestScenario {
   private client = new APIClient();
-  private lastResponse: HttpResponse<object>;
+  private lastResponseHttpCode: number | undefined = undefined;
+  private lastNotebookID: string | undefined = undefined;
 
   public async authorizeClient(login: string, password: string) {
     await this.client.authorize(login, password);
   }
 
   public async callAction(actionName: string) {
+    let resp;
     switch (actionName) {
       case "createNotebook":
-        this.lastResponse = await this.client.createNotebook(
+        resp = await this.client.createNotebook(
           "This notebook is created programmatically"
+        );
+        if (resp && resp.body) {
+          this.lastNotebookID = resp.body["id"];
+        }
+        this.lastResponseHttpCode = resp.httpCode;
+        break;
+      case "createNote":
+        if (!this.lastNotebookID) {
+          throw Error(
+            "[Test scenario] Can not create a note without a notebook id"
+          );
+        }
+        resp = await this.client.createNote(
+          this.lastNotebookID,
+          "This note is created programmatically"
+        );
+        this.lastResponseHttpCode = resp.httpCode;
+        break;
+      default:
+        throw Error(
+          `[Test scenario] Call action is not supported by test scenario: ${actionName}`
         );
     }
   }
 
   public checkResponseCode(httpCode: string) {
-    assert.equal(httpCode, String(this.lastResponse.httpCode));
+    assert.equal(httpCode, String(this.lastResponseHttpCode));
   }
 }

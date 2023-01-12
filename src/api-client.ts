@@ -1,8 +1,15 @@
 import cookie from "cookie";
 import fetch from "node-fetch";
 
-interface Notebook {
+export interface Notebook {
+  id: string;
   name: string;
+}
+
+export interface Note {
+  id: string;
+  notebookID: string;
+  content: string;
 }
 
 export interface HttpResponse<T> {
@@ -68,6 +75,40 @@ export class APIClient {
     return {
       httpCode,
       body: body as Notebook,
+    };
+  }
+  public async createNote(
+    notebookID: string,
+    noteContent: string
+  ): Promise<HttpResponse<Note>> {
+    const serializedCookie = cookie.serialize(
+      "Authentication",
+      this.authenticationToken
+    );
+    const response = await fetch(`${process.env.API_ROOT}/note`, {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+        cookie: serializedCookie,
+      },
+      body: JSON.stringify({
+        "notebook-id": notebookID,
+        "note-content": noteContent,
+      }),
+    });
+    const httpCode = response.status;
+
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body: body as Note,
     };
   }
 }

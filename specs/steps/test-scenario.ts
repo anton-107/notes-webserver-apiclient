@@ -35,6 +35,15 @@ export class TestScenario {
         );
         this.lastResponseHttpCode = resp.httpCode;
         break;
+      case "deleteNotebook":
+        if (!this.lastNotebookID) {
+          throw Error(
+            "[Test scenario] Can not delete a notebook without a notebook id"
+          );
+        }
+        resp = await this.client.deleteNotebook(this.lastNotebookID);
+        this.lastResponseHttpCode = resp.httpCode;
+        break;
       default:
         throw Error(
           `[Test scenario] Call action is not supported by test scenario: ${actionName}`

@@ -77,6 +77,37 @@ export class APIClient {
       body: body as Notebook,
     };
   }
+  public async deleteNotebook(
+    notebookID: string
+  ): Promise<HttpResponse<Notebook>> {
+    const serializedCookie = cookie.serialize(
+      "Authentication",
+      this.authenticationToken
+    );
+    const response = await fetch(`${process.env.API_ROOT}/delete-notebook`, {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+        cookie: serializedCookie,
+      },
+      body: JSON.stringify({
+        "notebook-id": notebookID,
+      }),
+    });
+    const httpCode = response.status;
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body: body as Notebook,
+    };
+  }
   public async createNote(
     notebookID: string,
     noteContent: string

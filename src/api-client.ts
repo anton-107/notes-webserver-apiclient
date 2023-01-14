@@ -1,5 +1,4 @@
 import cookie from "cookie";
-import fetch from "node-fetch";
 
 export interface Notebook {
   id: string;

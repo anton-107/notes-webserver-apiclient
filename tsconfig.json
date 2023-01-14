@@ -2,9 +2,9 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2021",
+    "target": "es6",
     "module": "node16",
-    "lib": ["es2021", "es2017", "es7", "es6"],
+    "lib": ["es2021", "es2017", "es7", "es6", "DOM"],
     "esModuleInterop": true,
     "noImplicitAny": true,
     "moduleResolution": "node16",

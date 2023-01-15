@@ -17,4 +17,6 @@ export declare class APIClient {
     createNotebook(notebookName: string): Promise<HttpResponse<Notebook>>;
     deleteNotebook(notebookID: string): Promise<HttpResponse<Notebook>>;
     createNote(notebookID: string, noteContent: string): Promise<HttpResponse<Note>>;
+    private sendPostRequest;
+    private parseNotebookResponse;
 }

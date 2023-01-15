@@ -48,84 +48,28 @@ export class APIClient {
   public async createNotebook(
     notebookName: string
   ): Promise<HttpResponse<Notebook>> {
-    const serializedCookie = cookie.serialize(
-      "Authentication",
-      this.authenticationToken
-    );
-    const response = await fetch(`${process.env.API_ROOT}/notebook`, {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-        cookie: serializedCookie,
-      },
-      body: JSON.stringify({
-        "notebook-name": notebookName,
-      }),
-    });
-    const httpCode = response.status;
-    if (httpCode !== 200) {
-      return {
-        httpCode,
-        body: undefined,
-      };
-    }
-    const body = await response.json();
-
-    return {
-      httpCode,
-      body: body as Notebook,
-    };
+    const response = await this.sendPostRequest('/notebook', JSON.stringify({
+      "notebook-name": notebookName,
+    }));
+    return await this.parseNotebookResponse(response);
   }
   public async deleteNotebook(
     notebookID: string
   ): Promise<HttpResponse<Notebook>> {
-    const serializedCookie = cookie.serialize(
-      "Authentication",
-      this.authenticationToken
-    );
-    const response = await fetch(`${process.env.API_ROOT}/delete-notebook`, {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-        cookie: serializedCookie,
-      },
-      body: JSON.stringify({
-        "notebook-id": notebookID,
-      }),
-    });
-    const httpCode = response.status;
-    if (httpCode !== 200) {
-      return {
-        httpCode,
-        body: undefined,
-      };
-    }
-    const body = await response.json();
-
-    return {
-      httpCode,
-      body: body as Notebook,
-    };
+    const response = await this.sendPostRequest('/delete-notebook', JSON.stringify({
+      "notebook-id": notebookID,
+    }));
+    return await this.parseNotebookResponse(response);
   }
   public async createNote(
     notebookID: string,
     noteContent: string
   ): Promise<HttpResponse<Note>> {
-    const serializedCookie = cookie.serialize(
-      "Authentication",
-      this.authenticationToken
-    );
-    const response = await fetch(`${process.env.API_ROOT}/note`, {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-        cookie: serializedCookie,
-      },
-      body: JSON.stringify({
-        "notebook-id": notebookID,
-        "note-content": noteContent,
-      }),
-    });
+    const response = await this.sendPostRequest('/note', JSON.stringify({
+      "notebook-id": notebookID,
+      "note-content": noteContent,
+    }));
+
     const httpCode = response.status;
 
     if (httpCode !== 200) {
@@ -139,6 +83,36 @@ export class APIClient {
     return {
       httpCode,
       body: body as Note,
+    };
+  }
+
+  private async sendPostRequest(path: string, body: string): Promise<Response> {
+    const serializedCookie = cookie.serialize(
+      "Authentication",
+      this.authenticationToken
+    );
+    return await fetch(`${process.env.API_ROOT}${path}`, {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+        cookie: serializedCookie,
+      },
+      body,
+    });
+  }
+  private async parseNotebookResponse (response: Response): Promise<{httpCode: number, body: Notebook | undefined}> {
+    const httpCode = response.status;
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body: body as Notebook,
     };
   }
 }

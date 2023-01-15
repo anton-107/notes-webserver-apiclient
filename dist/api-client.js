@@ -39,44 +39,26 @@ export class APIClient {
     }
     createNotebook(notebookName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const serializedCookie = cookie.serialize("Authentication", this.authenticationToken);
-            const response = yield fetch(`${process.env.API_ROOT}/notebook`, {
-                method: "post",
-                headers: {
-                    "content-type": "application/json",
-                    cookie: serializedCookie,
-                },
-                body: JSON.stringify({
-                    "notebook-name": notebookName,
-                }),
-            });
-            const httpCode = response.status;
-            if (httpCode !== 200) {
-                return {
-                    httpCode,
-                    body: undefined,
-                };
-            }
-            const body = yield response.json();
-            return {
-                httpCode,
-                body: body,
-            };
+            const response = yield this.sendPostRequest('/notebook', JSON.stringify({
+                "notebook-name": notebookName,
+            }));
+            return yield this.parseNotebookResponse(response);
         });
     }
     deleteNotebook(notebookID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const serializedCookie = cookie.serialize("Authentication", this.authenticationToken);
-            const response = yield fetch(`${process.env.API_ROOT}/delete-notebook`, {
-                method: "post",
-                headers: {
-                    "content-type": "application/json",
-                    cookie: serializedCookie,
-                },
-                body: JSON.stringify({
-                    "notebook-id": notebookID,
-                }),
-            });
+            const response = yield this.sendPostRequest('/delete-notebook', JSON.stringify({
+                "notebook-id": notebookID,
+            }));
+            return yield this.parseNotebookResponse(response);
+        });
+    }
+    createNote(notebookID, noteContent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.sendPostRequest('/note', JSON.stringify({
+                "notebook-id": notebookID,
+                "note-content": noteContent,
+            }));
             const httpCode = response.status;
             if (httpCode !== 200) {
                 return {
@@ -91,20 +73,21 @@ export class APIClient {
             };
         });
     }
-    createNote(notebookID, noteContent) {
+    sendPostRequest(path, body) {
         return __awaiter(this, void 0, void 0, function* () {
             const serializedCookie = cookie.serialize("Authentication", this.authenticationToken);
-            const response = yield fetch(`${process.env.API_ROOT}/note`, {
+            return yield fetch(`${process.env.API_ROOT}${path}`, {
                 method: "post",
                 headers: {
                     "content-type": "application/json",
                     cookie: serializedCookie,
                 },
-                body: JSON.stringify({
-                    "notebook-id": notebookID,
-                    "note-content": noteContent,
-                }),
+                body,
             });
+        });
+    }
+    parseNotebookResponse(response) {
+        return __awaiter(this, void 0, void 0, function* () {
             const httpCode = response.status;
             if (httpCode !== 200) {
                 return {

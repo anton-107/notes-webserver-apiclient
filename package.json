@@ -9,6 +9,7 @@
     "test": "NODE_OPTIONS=\"--loader ts-node/esm\" cucumber-js --publish-quiet",
     "coverage": "nyc npm test --lines 100 --branches 100",
     "check-format": "prettier --check .",
+    "check-duplications": "jscpd --pattern 'src/**/*.ts' -l 12 --exitCode 1",
     "fix-format": "prettier --write .",
     "lint": "eslint . --ext .ts",
     "fix-lint": "eslint . --ext .ts --fix",
@@ -24,7 +25,8 @@
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.2",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "jscpd": "^3.5.1"
   },
   "dependencies": {
     "cookie": "^0.5.0"

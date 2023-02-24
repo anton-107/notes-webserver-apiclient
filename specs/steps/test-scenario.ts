@@ -35,6 +35,9 @@ export class TestScenario {
         );
         this.lastResponseHttpCode = resp.httpCode;
         break;
+      case "createNotes":
+        await this.callCreateNotes();
+        break;
       case "deleteNotebook":
         if (!this.lastNotebookID) {
           throw Error(
@@ -53,5 +56,31 @@ export class TestScenario {
 
   public checkResponseCode(httpCode: string) {
     assert.equal(httpCode, String(this.lastResponseHttpCode));
+  }
+
+  private async callCreateNotes(): Promise<void> {
+    if (!this.lastNotebookID) {
+      throw Error(
+        "[Test scenario] Can not create a note without a notebook id"
+      );
+    }
+    const resp = await this.client.createNotes([
+      {
+        id: "",
+        notebookID: this.lastNotebookID,
+        content: "This note #1 is created programmatically",
+      },
+      {
+        id: "",
+        notebookID: this.lastNotebookID,
+        content: "This note #2 is created programmatically",
+      },
+      {
+        id: "",
+        notebookID: this.lastNotebookID,
+        content: "This note #3 is created programmatically",
+      },
+    ]);
+    this.lastResponseHttpCode = resp.httpCode;
   }
 }

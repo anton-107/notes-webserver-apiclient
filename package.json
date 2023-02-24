@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "NODE_OPTIONS=\"--loader ts-node/esm\" cucumber-js --publish-quiet",
-    "coverage": "nyc npm test --lines 100 --branches 100",
+    "test:coverage": "nyc npm test --lines 100 --branches 100",
     "check-format": "prettier --check .",
     "check-duplications": "jscpd --pattern 'src/**/*.ts' -l 12 --exitCode 1",
     "fix-format": "prettier --write .",

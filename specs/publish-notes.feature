@@ -8,6 +8,10 @@ Feature: Publish notes via API client
   Scenario: Create a note
     When I call 'createNote' action
     Then I get '200' http code in response
+  
+  Scenario: Create multiple notes
+    When I call 'createNotes' action
+    Then I get '201' http code in response
 
   Scenario: Delete a notebook
     When I call 'deleteNotebook' action

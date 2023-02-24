@@ -48,27 +48,36 @@ export class APIClient {
   public async createNotebook(
     notebookName: string
   ): Promise<HttpResponse<Notebook>> {
-    const response = await this.sendPostRequest('/notebook', JSON.stringify({
-      "notebook-name": notebookName,
-    }));
+    const response = await this.sendPostRequest(
+      "/notebook",
+      JSON.stringify({
+        "notebook-name": notebookName,
+      })
+    );
     return await this.parseNotebookResponse(response);
   }
   public async deleteNotebook(
     notebookID: string
   ): Promise<HttpResponse<Notebook>> {
-    const response = await this.sendPostRequest('/delete-notebook', JSON.stringify({
-      "notebook-id": notebookID,
-    }));
+    const response = await this.sendPostRequest(
+      "/delete-notebook",
+      JSON.stringify({
+        "notebook-id": notebookID,
+      })
+    );
     return await this.parseNotebookResponse(response);
   }
   public async createNote(
     notebookID: string,
     noteContent: string
   ): Promise<HttpResponse<Note>> {
-    const response = await this.sendPostRequest('/note', JSON.stringify({
-      "notebook-id": notebookID,
-      "note-content": noteContent,
-    }));
+    const response = await this.sendPostRequest(
+      "/note",
+      JSON.stringify({
+        "notebook-id": notebookID,
+        "note-content": noteContent,
+      })
+    );
 
     const httpCode = response.status;
 
@@ -83,6 +92,34 @@ export class APIClient {
     return {
       httpCode,
       body: body as Note,
+    };
+  }
+  public async createNotes(notes: Note[]): Promise<HttpResponse<void>> {
+    const response = await this.sendPostRequest(
+      "/note",
+      JSON.stringify({
+        notes: notes.map((n) => {
+          return {
+            "notebook-id": n.notebookID,
+            "note-content": n.content,
+          };
+        }),
+      })
+    );
+
+    const httpCode = response.status;
+
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body,
     };
   }
 
@@ -100,7 +137,9 @@ export class APIClient {
       body,
     });
   }
-  private async parseNotebookResponse (response: Response): Promise<{httpCode: number, body: Notebook | undefined}> {
+  private async parseNotebookResponse(
+    response: Response
+  ): Promise<{ httpCode: number; body: Notebook | undefined }> {
     const httpCode = response.status;
     if (httpCode !== 200) {
       return {

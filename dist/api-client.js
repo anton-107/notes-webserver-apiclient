@@ -39,7 +39,7 @@ export class APIClient {
     }
     createNotebook(notebookName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.sendPostRequest('/notebook', JSON.stringify({
+            const response = yield this.sendPostRequest("/notebook", JSON.stringify({
                 "notebook-name": notebookName,
             }));
             return yield this.parseNotebookResponse(response);
@@ -47,7 +47,7 @@ export class APIClient {
     }
     deleteNotebook(notebookID) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.sendPostRequest('/delete-notebook', JSON.stringify({
+            const response = yield this.sendPostRequest("/delete-notebook", JSON.stringify({
                 "notebook-id": notebookID,
             }));
             return yield this.parseNotebookResponse(response);
@@ -55,7 +55,7 @@ export class APIClient {
     }
     createNote(notebookID, noteContent) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.sendPostRequest('/note', JSON.stringify({
+            const response = yield this.sendPostRequest("/note", JSON.stringify({
                 "notebook-id": notebookID,
                 "note-content": noteContent,
             }));
@@ -70,6 +70,30 @@ export class APIClient {
             return {
                 httpCode,
                 body: body,
+            };
+        });
+    }
+    createNotes(notes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.sendPostRequest("/note", JSON.stringify({
+                notes: notes.map((n) => {
+                    return {
+                        "notebook-id": n.notebookID,
+                        "note-content": n.content,
+                    };
+                }),
+            }));
+            const httpCode = response.status;
+            if (httpCode !== 200) {
+                return {
+                    httpCode,
+                    body: undefined,
+                };
+            }
+            const body = yield response.json();
+            return {
+                httpCode,
+                body,
             };
         });
     }

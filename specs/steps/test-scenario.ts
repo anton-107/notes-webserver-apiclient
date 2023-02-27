@@ -38,6 +38,15 @@ export class TestScenario {
       case "createNotes":
         await this.callCreateNotes();
         break;
+      case "listNotes":
+        if (!this.lastNotebookID) {
+          throw Error(
+            "[Test scenario] Can not list notes without a notebook id"
+          );
+        }
+        resp = await this.client.listNotes(this.lastNotebookID);
+        this.lastResponseHttpCode = resp.httpCode;
+        break;
       case "deleteNotebook":
         if (!this.lastNotebookID) {
           throw Error(

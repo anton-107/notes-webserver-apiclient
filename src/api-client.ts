@@ -123,6 +123,37 @@ export class APIClient {
     };
   }
 
+  public async listNotes(notebookID: string): Promise<HttpResponse<Note[]>> {
+    const response = await this.sendGetRequest(`/notebook/${notebookID}/note`);
+    const httpCode = response.status;
+
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body,
+    };
+  }
+
+  private async sendGetRequest(path: string): Promise<Response> {
+    const serializedCookie = cookie.serialize(
+      "Authentication",
+      this.authenticationToken
+    );
+    return await fetch(`${process.env.API_ROOT}${path}`, {
+      method: "get",
+      headers: {
+        "content-type": "application/json",
+        cookie: serializedCookie,
+      },
+    });
+  }
   private async sendPostRequest(path: string, body: string): Promise<Response> {
     const serializedCookie = cookie.serialize(
       "Authentication",

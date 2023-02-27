@@ -97,6 +97,35 @@ export class APIClient {
             };
         });
     }
+    listNotes(notebookID) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.sendGetRequest(`/notebook/${notebookID}/note`);
+            const httpCode = response.status;
+            if (httpCode !== 200) {
+                return {
+                    httpCode,
+                    body: undefined,
+                };
+            }
+            const body = yield response.json();
+            return {
+                httpCode,
+                body,
+            };
+        });
+    }
+    sendGetRequest(path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const serializedCookie = cookie.serialize("Authentication", this.authenticationToken);
+            return yield fetch(`${process.env.API_ROOT}${path}`, {
+                method: "get",
+                headers: {
+                    "content-type": "application/json",
+                    cookie: serializedCookie,
+                },
+            });
+        });
+    }
     sendPostRequest(path, body) {
         return __awaiter(this, void 0, void 0, function* () {
             const serializedCookie = cookie.serialize("Authentication", this.authenticationToken);

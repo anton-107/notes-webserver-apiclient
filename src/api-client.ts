@@ -5,10 +5,24 @@ export interface Notebook {
   name: string;
 }
 
+export interface NoteType {
+  type: string;
+}
+
+export type FormBody = { [key: string]: string };
+
+export interface NoteForm extends FormBody {
+  "note-type"?: string;
+  "notebook-id"?: string;
+  "note-content"?: string;
+}
+
 export interface Note {
   id: string;
   notebookID: string;
   content: string;
+  type: NoteType;
+  extensionProperties?: { [key: string]: string };
 }
 
 export interface HttpResponse<T> {
@@ -69,13 +83,15 @@ export class APIClient {
   }
   public async createNote(
     notebookID: string,
-    noteContent: string
+    noteContent: string,
+    formBody: NoteForm = {}
   ): Promise<HttpResponse<Note>> {
     const response = await this.sendPostRequest(
       "/note",
       JSON.stringify({
         "notebook-id": notebookID,
         "note-content": noteContent,
+        ...formBody,
       })
     );
 
@@ -94,7 +110,7 @@ export class APIClient {
       body: body as Note,
     };
   }
-  public async createNotes(notes: Note[]): Promise<HttpResponse<void>> {
+  public async createNotes(notes: NoteForm[]): Promise<HttpResponse<void>> {
     const response = await this.sendPostRequest(
       "/note",
       JSON.stringify({
@@ -102,6 +118,7 @@ export class APIClient {
           return {
             "notebook-id": n.notebookID,
             "note-content": n.content,
+            ...n,
           };
         }),
       })

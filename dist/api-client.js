@@ -53,12 +53,9 @@ export class APIClient {
             return yield this.parseNotebookResponse(response);
         });
     }
-    createNote(notebookID, noteContent) {
+    createNote(notebookID, noteContent, formBody = {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.sendPostRequest("/note", JSON.stringify({
-                "notebook-id": notebookID,
-                "note-content": noteContent,
-            }));
+            const response = yield this.sendPostRequest("/note", JSON.stringify(Object.assign({ "notebook-id": notebookID, "note-content": noteContent }, formBody)));
             const httpCode = response.status;
             if (httpCode !== 200) {
                 return {
@@ -77,10 +74,7 @@ export class APIClient {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.sendPostRequest("/note", JSON.stringify({
                 notes: notes.map((n) => {
-                    return {
-                        "notebook-id": n.notebookID,
-                        "note-content": n.content,
-                    };
+                    return Object.assign({ "notebook-id": n.notebookID, "note-content": n.content }, n);
                 }),
             }));
             const httpCode = response.status;

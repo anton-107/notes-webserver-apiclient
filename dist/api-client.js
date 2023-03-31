@@ -104,7 +104,7 @@ export class APIClient {
             const body = yield response.json();
             return {
                 httpCode,
-                body,
+                body: body.notebooks,
             };
         });
     }
@@ -121,7 +121,7 @@ export class APIClient {
             const body = yield response.json();
             return {
                 httpCode,
-                body,
+                body: body.notes,
             };
         });
     }

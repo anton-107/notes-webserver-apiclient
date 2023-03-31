@@ -150,11 +150,11 @@ export class APIClient {
         body: undefined,
       };
     }
-    const body = await response.json();
+    const body: { notebooks: Notebook[] } = await response.json();
 
     return {
       httpCode,
-      body,
+      body: body.notebooks,
     };
   }
   public async listNotes(notebookID: string): Promise<HttpResponse<Note[]>> {
@@ -167,11 +167,11 @@ export class APIClient {
         body: undefined,
       };
     }
-    const body = await response.json();
+    const body: { notes: Note[] } = await response.json();
 
     return {
       httpCode,
-      body,
+      body: body.notes,
     };
   }
 

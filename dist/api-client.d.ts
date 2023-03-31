@@ -33,6 +33,7 @@ export declare class APIClient {
     deleteNotebook(notebookID: string): Promise<HttpResponse<Notebook>>;
     createNote(notebookID: string, noteContent: string, formBody?: NoteForm): Promise<HttpResponse<Note>>;
     createNotes(notes: NoteForm[]): Promise<HttpResponse<void>>;
+    listNotebooks(): Promise<HttpResponse<Notebook[]>>;
     listNotes(notebookID: string): Promise<HttpResponse<Note[]>>;
     private sendGetRequest;
     private sendPostRequest;

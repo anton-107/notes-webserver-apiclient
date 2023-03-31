@@ -38,6 +38,10 @@ export class TestScenario {
       case "createNotes":
         await this.callCreateNotes();
         break;
+      case "listNotebooks":
+        resp = await this.client.listNotebooks();
+        this.lastResponseHttpCode = resp.httpCode;
+        break;
       case "listNotes":
         if (!this.lastNotebookID) {
           throw Error(

@@ -140,6 +140,23 @@ export class APIClient {
     };
   }
 
+  public async listNotebooks(): Promise<HttpResponse<Notebook[]>> {
+    const response = await this.sendGetRequest("/notebook");
+    const httpCode = response.status;
+
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body,
+    };
+  }
   public async listNotes(notebookID: string): Promise<HttpResponse<Note[]>> {
     const response = await this.sendGetRequest(`/notebook/${notebookID}/note`);
     const httpCode = response.status;

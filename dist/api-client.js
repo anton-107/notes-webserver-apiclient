@@ -91,6 +91,23 @@ export class APIClient {
             };
         });
     }
+    listNotebooks() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.sendGetRequest("/notebook");
+            const httpCode = response.status;
+            if (httpCode !== 200) {
+                return {
+                    httpCode,
+                    body: undefined,
+                };
+            }
+            const body = yield response.json();
+            return {
+                httpCode,
+                body,
+            };
+        });
+    }
     listNotes(notebookID) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.sendGetRequest(`/notebook/${notebookID}/note`);

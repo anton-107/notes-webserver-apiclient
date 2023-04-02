@@ -13,6 +13,10 @@ Feature: Publish notes via API client
     When I call 'createNote' action
     Then I get '200' http code in response
   
+  Scenario: Update a note
+    When I call 'updateNote' action
+    Then I get '200' http code in response
+  
   Scenario: Create multiple notes
     When I call 'createNotes' action
     Then I get '201' http code in response

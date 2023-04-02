@@ -6,6 +6,7 @@ export class TestScenario {
   private client = new APIClient();
   private lastResponseHttpCode: number | undefined = undefined;
   private lastNotebookID: string | undefined = undefined;
+  private lastNoteID: string | undefined = undefined;
 
   public async authorizeClient(login: string, password: string) {
     await this.client.authorize(login, password);
@@ -24,16 +25,10 @@ export class TestScenario {
         this.lastResponseHttpCode = resp.httpCode;
         break;
       case "createNote":
-        if (!this.lastNotebookID) {
-          throw Error(
-            "[Test scenario] Can not create a note without a notebook id"
-          );
-        }
-        resp = await this.client.createNote(
-          this.lastNotebookID,
-          "This note is created programmatically"
-        );
-        this.lastResponseHttpCode = resp.httpCode;
+        await this.createNote();
+        break;
+      case "updateNote":
+        await this.uodateNote();
         break;
       case "createNotes":
         await this.callCreateNotes();
@@ -66,7 +61,32 @@ export class TestScenario {
         );
     }
   }
-
+  private async createNote() {
+    if (!this.lastNotebookID) {
+      throw Error(
+        "[Test scenario] Can not create a note without a notebook id"
+      );
+    }
+    const resp = await this.client.createNote(
+      this.lastNotebookID,
+      "This note is created programmatically"
+    );
+    if (resp && resp.body) {
+      this.lastNoteID = resp.body["id"];
+    }
+    this.lastResponseHttpCode = resp.httpCode;
+  }
+  private async uodateNote() {
+    if (!this.lastNoteID) {
+      throw Error(
+        "[Test scenario] Can not update a note without an existing note id"
+      );
+    }
+    const resp = await this.client.updateNote(this.lastNoteID, {
+      "note-content": "This note was updated programmatically",
+    });
+    this.lastResponseHttpCode = resp.httpCode;
+  }
   public checkResponseCode(httpCode: string) {
     assert.equal(httpCode, String(this.lastResponseHttpCode));
   }

@@ -9,12 +9,16 @@ export interface NoteType {
   type: string;
 }
 
-export type FormBody = { [key: string]: string };
+export type FormBody = { [key: string]: unknown };
 
 export interface NoteForm extends FormBody {
   "note-type"?: string;
+  "note-id"?: string;
   "notebook-id"?: string;
   "note-content"?: string;
+  "note-section"?: string;
+  "note-manual-order"?: string;
+  "table-columns"?: { [key: string]: string };
 }
 
 export interface Note {
@@ -137,6 +141,33 @@ export class APIClient {
     return {
       httpCode,
       body,
+    };
+  }
+  public async updateNote(
+    noteID: string,
+    formBody: NoteForm = {}
+  ): Promise<HttpResponse<Note>> {
+    const response = await this.sendPostRequest(
+      `/note/${noteID}/edit`,
+      JSON.stringify({
+        "note-id": noteID,
+        ...formBody,
+      })
+    );
+
+    const httpCode = response.status;
+
+    if (httpCode !== 200) {
+      return {
+        httpCode,
+        body: undefined,
+      };
+    }
+    const body = await response.json();
+
+    return {
+      httpCode,
+      body: body as Note,
     };
   }
 

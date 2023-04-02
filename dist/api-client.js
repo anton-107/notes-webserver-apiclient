@@ -91,6 +91,23 @@ export class APIClient {
             };
         });
     }
+    updateNote(noteID, formBody = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.sendPostRequest(`/note/${noteID}/edit`, JSON.stringify(Object.assign({ "note-id": noteID }, formBody)));
+            const httpCode = response.status;
+            if (httpCode !== 200) {
+                return {
+                    httpCode,
+                    body: undefined,
+                };
+            }
+            const body = yield response.json();
+            return {
+                httpCode,
+                body: body,
+            };
+        });
+    }
     listNotebooks() {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield this.sendGetRequest("/notebook");

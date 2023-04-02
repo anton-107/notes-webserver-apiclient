@@ -6,12 +6,18 @@ export interface NoteType {
     type: string;
 }
 export type FormBody = {
-    [key: string]: string;
+    [key: string]: unknown;
 };
 export interface NoteForm extends FormBody {
     "note-type"?: string;
+    "note-id"?: string;
     "notebook-id"?: string;
     "note-content"?: string;
+    "note-section"?: string;
+    "note-manual-order"?: string;
+    "table-columns"?: {
+        [key: string]: string;
+    };
 }
 export interface Note {
     id: string;
@@ -33,6 +39,7 @@ export declare class APIClient {
     deleteNotebook(notebookID: string): Promise<HttpResponse<Notebook>>;
     createNote(notebookID: string, noteContent: string, formBody?: NoteForm): Promise<HttpResponse<Note>>;
     createNotes(notes: NoteForm[]): Promise<HttpResponse<void>>;
+    updateNote(noteID: string, formBody?: NoteForm): Promise<HttpResponse<Note>>;
     listNotebooks(): Promise<HttpResponse<Notebook[]>>;
     listNotes(notebookID: string): Promise<HttpResponse<Note[]>>;
     private sendGetRequest;

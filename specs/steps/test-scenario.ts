@@ -28,7 +28,7 @@ export class TestScenario {
         await this.createNote();
         break;
       case "updateNote":
-        await this.uodateNote();
+        await this.updateNote();
         break;
       case "createNotes":
         await this.callCreateNotes();
@@ -76,7 +76,7 @@ export class TestScenario {
     }
     this.lastResponseHttpCode = resp.httpCode;
   }
-  private async uodateNote() {
+  private async updateNote() {
     if (!this.lastNoteID) {
       throw Error(
         "[Test scenario] Can not update a note without an existing note id"

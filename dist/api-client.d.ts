@@ -1,7 +1,5 @@
-export interface Notebook {
-    id: string;
-    name: string;
-}
+import { Note } from "notes-model/dist/note-model.js";
+import { Notebook } from "notes-model/dist/notebook-model.js";
 export interface NoteType {
     type: string;
 }
@@ -16,15 +14,6 @@ export interface NoteForm extends FormBody {
     "note-section"?: string;
     "note-manual-order"?: string;
     "table-columns"?: {
-        [key: string]: string;
-    };
-}
-export interface Note {
-    id: string;
-    notebookID: string;
-    content: string;
-    type: NoteType;
-    extensionProperties?: {
         [key: string]: string;
     };
 }

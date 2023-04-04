@@ -29,6 +29,7 @@
     "jscpd": "^3.5.1"
   },
   "dependencies": {
-    "cookie": "^0.5.0"
+    "cookie": "^0.5.0",
+    "notes-model": "anton-107/notes-model"
   }
 }
